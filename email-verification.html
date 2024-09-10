@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>이메일 인증</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <h1>이메일 인증</h1>
+  <script>
+    // URL에서 token 파라미터를 추출
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // 토큰을 쿼리파라미터로 가져오기
+    const token = getQueryParam('token');
+
+    console.log("token", token)
+
+    // 인증 요청 서버로 보내기
+    if (token) {
+      axios.post(`http://localhost:3000/auth/sign-up/email-verification`, { token })
+        .then(response => {
+          document.body.innerHTML = `<h2>${response.data.message}</h2>`;
+        })
+        .catch(error => {
+          document.body.innerHTML = `<h2>인증에 실패했습니다. ${error.message}</h2>`;
+          console.error(error);
+        });
+    } else {
+      document.body.innerHTML = `<h2>토큰이 제공되지 않았습니다.</h2>`;
+    }
+  </script>
+</body>
+</html>
